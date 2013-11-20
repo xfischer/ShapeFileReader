@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjNET", "ProjNET\ProjNET.csproj", "{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShapeFileReader.Test", "ShapeFileReader.Test\ShapeFileReader.Test.csproj", "{0DAB012D-3C6A-4BFF-BFCE-EA87FFA79122}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dependencies", "Dependencies", "{47E3831E-B27B-46BC-B575-1FD970E95269}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Catfood.Shapefile", "Catfood.Shapefile\Catfood.Shapefile.csproj", "{2086F1A5-3D34-40AD-80EF-C1943411451F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoAPI", "GeoAPI\GeoAPI.csproj", "{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DAB012D-3C6A-4BFF-BFCE-EA87FFA79122}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DAB012D-3C6A-4BFF-BFCE-EA87FFA79122}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DAB012D-3C6A-4BFF-BFCE-EA87FFA79122}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DAB012D-3C6A-4BFF-BFCE-EA87FFA79122}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2086F1A5-3D34-40AD-80EF-C1943411451F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2086F1A5-3D34-40AD-80EF-C1943411451F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2086F1A5-3D34-40AD-80EF-C1943411451F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2086F1A5-3D34-40AD-80EF-C1943411451F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E028BDD2-55E1-4E5F-BE31-35FAEC8D6428} = {47E3831E-B27B-46BC-B575-1FD970E95269}
+		{2086F1A5-3D34-40AD-80EF-C1943411451F} = {47E3831E-B27B-46BC-B575-1FD970E95269}
+		{FFB69466-79DE-466A-ADA7-5C47C5C5CA3A} = {47E3831E-B27B-46BC-B575-1FD970E95269}
+	EndGlobalSection
+EndGlobal

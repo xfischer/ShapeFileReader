@@ -8,63 +8,65 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Data;
+using System.Collections;
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
-    /// <summary>
-    /// A Shapefile PolyLine  Shape
-    /// </summary>
-    public class ShapePolyLine : Shape
-    {
-        /// <summary>
-        /// Bounding Box
-        /// </summary>
-        internal RectangleD _boundingBox;
+	/// <summary>
+	/// A Shapefile PolyLine  Shape
+	/// </summary>
+	public class ShapePolyLine : Shape
+	{
+		/// <summary>
+		/// Bounding Box
+		/// </summary>
+		internal RectangleD _boundingBox;
 
-        /// <summary>
-        /// List of parts
-        /// </summary>
-        internal List<PointD[]> _parts;
+		/// <summary>
+		/// List of parts
+		/// </summary>
+		internal List<PointD[]> _parts;
 
-        /// <summary>
-        /// A Shapefile PolyLine Shape
-        /// </summary>
-        /// <param name="recordNumber">The record number in the Shapefile</param>
-        /// <param name="metadata">Metadata about the shape</param>        
-        /// <param name="dataRecord">IDataRecord associated with the metadata</param>
-        protected internal ShapePolyLine(int recordNumber, StringDictionary metadata, IDataRecord dataRecord)
-            : base(ShapeType.PolyLine, recordNumber, metadata, dataRecord) {}
+		/// <summary>
+		/// A Shapefile PolyLine Shape
+		/// </summary>
+		/// <param name="recordNumber">The record number in the Shapefile</param>
+		/// <param name="metadata">Metadata about the shape</param>        
+		/// <param name="dataRecord">IDataRecord associated with the metadata</param>
+		protected internal ShapePolyLine(int recordNumber, ArrayList metadata, IDataRecord dataRecord)
+			: base(ShapeType.PolyLine, recordNumber, metadata, dataRecord) { }
 
-        /// <summary>
-        /// A Shapefile PolyLine Shape
-        /// </summary>
-        /// <param name="recordNumber">The record number in the Shapefile</param>
-        /// <param name="metadata">Metadata about the shape</param>
-        /// <param name="dataRecord">IDataRecord associated with the metadata</param>
-        /// <param name="shapeData">The shape record as a byte array</param>
-        /// <exception cref="ArgumentNullException">Thrown if shapeData is null</exception>
-        /// <exception cref="InvalidOperationException">Thrown if an error occurs parsing shapeData</exception>
-        protected internal ShapePolyLine(int recordNumber, StringDictionary metadata, IDataRecord dataRecord, byte[] shapeData)
-            : base(ShapeType.PolyLine, recordNumber, metadata, dataRecord)
-        {
-            ParsePolyLineOrPolygon(shapeData, out _boundingBox, out _parts);
-        }
+		/// <summary>
+		/// A Shapefile PolyLine Shape
+		/// </summary>
+		/// <param name="recordNumber">The record number in the Shapefile</param>
+		/// <param name="metadata">Metadata about the shape</param>
+		/// <param name="dataRecord">IDataRecord associated with the metadata</param>
+		/// <param name="shapeData">The shape record as a byte array</param>
+		/// <exception cref="ArgumentNullException">Thrown if shapeData is null</exception>
+		/// <exception cref="InvalidOperationException">Thrown if an error occurs parsing shapeData</exception>
+		protected internal ShapePolyLine(int recordNumber, ArrayList metadata, IDataRecord dataRecord, byte[] shapeData)
+			: base(ShapeType.PolyLine, recordNumber, metadata, dataRecord)
+		{
+			ParsePolyLineOrPolygon(shapeData, out _boundingBox, out _parts);
+		}
 
-        /// <summary>
-        /// Gets the bounding box
-        /// </summary>
-        public RectangleD BoundingBox
-        {
-            get { return _boundingBox; }
-        }
-        
-        /// <summary>
-        /// Gets a list of parts (segments) for the PolyLine. Each part
-        /// is an array of double precision points
-        /// </summary>
-        public List<PointD[]> Parts
-        {
-            get { return _parts; }
-        }
-    }
+		/// <summary>
+		/// Gets the bounding box
+		/// </summary>
+		public RectangleD BoundingBox
+		{
+			get { return _boundingBox; }
+		}
+
+		/// <summary>
+		/// Gets a list of parts (segments) for the PolyLine. Each part
+		/// is an array of double precision points
+		/// </summary>
+		public List<PointD[]> Parts
+		{
+			get { return _parts; }
+		}
+	}
 }
+

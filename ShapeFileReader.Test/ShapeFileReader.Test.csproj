@@ -52,6 +52,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -71,6 +74,28 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Catfood.Shapefile\ShapefileReader.csproj">
+      <Project>{2086f1a5-3d34-40ad-80ef-c1943411451f}</Project>
+      <Name>ShapefileReader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GeoAPI\GeoAPI.csproj">
+      <Project>{ffb69466-79de-466a-ada7-5c47c5c5ca3a}</Project>
+      <Name>GeoAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetTopologySuite.IO.GeoTools\NetTopologySuite.IO.GeoTools.csproj">
+      <Project>{21805958-869e-49f5-a4ed-0ac8599d62f0}</Project>
+      <Name>NetTopologySuite.IO.GeoTools</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NetTopologySuite\NetTopologySuite.csproj">
+      <Project>{5770daa9-84e5-4770-af43-f6b815894368}</Project>
+      <Name>NetTopologySuite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ProjNET\ProjNET.csproj">
+      <Project>{e028bdd2-55e1-4e5f-be31-35faec8d6428}</Project>
+      <Name>ProjNET</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
     /// <summary>
     /// A simple double precision point

@@ -5,9 +5,10 @@ WORK IN PROGRESS
 
 ESRI Shapefile reader
 
-Threadsafe shape file reader.
+Relies on modified version of CatFood.ShapeFile that does not uses OLEDB connections (but needs .SHX index file)
 
-Relies on modified version of CatFood.ShapeFile that does not uses OLEDB connections.
+Relies on NetTopologySuite for a .SHP reader only
+
 
 
 Depends on :
@@ -18,3 +19,4 @@ CatFood.ShapeFile : http://shapefile.codeplex.com/
 
 GeoAPI.NET : http://geoapi.codeplex.com/
 
+NetTopologySuite : https://code.google.com/p/nettopologysuite/

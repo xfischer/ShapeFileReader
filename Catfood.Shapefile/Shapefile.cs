@@ -9,10 +9,10 @@ using System.Collections.Specialized;
 using System.Text;
 using System.IO;
 using System.Drawing;
-using NetTopologySuite.IO;
 using System.Collections;
+using System.Data;
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
 	/// <summary>
 	/// Provides a readonly IEnumerable interface to an ERSI Shapefile.
@@ -26,10 +26,10 @@ namespace Catfood.Shapefile
 		private const string MainPathExtension = "shp";
 		private const string IndexPathExtension = "shx";
 		private const string DbasePathExtension = "dbf";
+		private const string ProjPathExtension = "prj";
 
 		private bool _disposed;
 		private bool _opened;
-		private bool _rawMetadataOnly;
 		private int _currentIndex = -1;
 		private int _count;
 		private RectangleD _boundingBox;
@@ -37,22 +37,14 @@ namespace Catfood.Shapefile
 		private string _shapefileMainPath;
 		private string _shapefileIndexPath;
 		private string _shapefileDbasePath;
+		private string _shapefileProjPath;
 		private FileStream _mainStream;
 		private FileStream _indexStream;
 		private Header _mainHeader;
 		private Header _indexHeader;
-
-		private DbaseFieldDescriptor[] _dbaseFields;
-		private DbaseFileReader _dbfReader;
-		private IEnumerator _dbfEnumerator;
-		private DbaseFileHeader _dbfHeader;
-
-		/// <summary>
-		/// Create a new Shapefile object.
-		/// </summary>
-		public Shapefile()
-			: this(null) { }
-
+		private DbaseFileHeader _dBaseHeader;
+		private DbaseFileReader _dBaseFileReader;
+		private IEnumerator _dBaseEnumerator;
 
 		/// <summary>
 		/// Create a new Shapefile object and open a Shapefile. Note that three files are required - 
@@ -104,6 +96,7 @@ namespace Catfood.Shapefile
 			_shapefileMainPath = Path.ChangeExtension(path, MainPathExtension);
 			_shapefileIndexPath = Path.ChangeExtension(path, IndexPathExtension);
 			_shapefileDbasePath = Path.ChangeExtension(path, DbasePathExtension);
+			_shapefileProjPath = Path.ChangeExtension(path, ProjPathExtension);
 
 			if (!File.Exists(_shapefileMainPath))
 			{
@@ -116,6 +109,12 @@ namespace Catfood.Shapefile
 			if (!File.Exists(_shapefileDbasePath))
 			{
 				throw new FileNotFoundException("Shapefile dBase file not found", _shapefileDbasePath);
+			}
+
+			// read projection if file exist
+			if (File.Exists(_shapefileProjPath))
+			{
+				this.Projection = File.ReadAllText(_shapefileProjPath);
 			}
 
 			_mainStream = File.Open(_shapefileMainPath, FileMode.Open, FileAccess.Read, FileShare.Read);
@@ -147,16 +146,9 @@ namespace Catfood.Shapefile
 			_count = (_indexHeader.FileLength - (Header.HeaderLength / 2)) / 4;
 
 			// open the metadata database
-			_dbfReader = new DbaseFileReader(_shapefileDbasePath);
-			_dbfHeader = _dbfReader.GetHeader();
-
-			// copy dbase fields to our own array. Insert into the first position, the shape column
-			_dbaseFields = new DbaseFieldDescriptor[_dbfHeader.Fields.Length + 1];
-			_dbaseFields[0] = DbaseFieldDescriptor.ShapeField();
-			for (int i = 0; i < _dbfHeader.Fields.Length; i++)
-				_dbaseFields[i + 1] = _dbfHeader.Fields[i];
-
-			_dbfEnumerator = _dbfReader.GetEnumerator();
+			_dBaseFileReader = new DbaseFileReader(_shapefileDbasePath);
+			_dBaseHeader = _dBaseFileReader.GetHeader();
+			_dBaseEnumerator = _dBaseFileReader.GetEnumerator();
 
 			_opened = true;
 		}
@@ -167,17 +159,6 @@ namespace Catfood.Shapefile
 		public void Close()
 		{
 			Dispose();
-		}
-
-		/// <summary>
-		/// If true then only the IDataRecord (DataRecord) property is available to access metadata for each shape.
-		/// If flase (the default) then metadata is also parsed into a string dictionary (use GetMetadataNames() and
-		/// GetMetadata() to access)
-		/// </summary>
-		public bool RawMetadataOnly
-		{
-			get { return _rawMetadataOnly; }
-			set { _rawMetadataOnly = value; }
 		}
 
 		/// <summary>
@@ -210,6 +191,15 @@ namespace Catfood.Shapefile
 		}
 
 		/// <summary>
+		/// Projection format and coordinate system if prj file present
+		/// </summary>
+		public string Projection
+		{
+			get;
+			private set;
+		}
+
+		/// <summary>
 		/// Gets the ShapeType of the Shapefile
 		/// </summary>
 		public ShapeType Type
@@ -223,8 +213,27 @@ namespace Catfood.Shapefile
 			}
 		}
 
+		/// <summary>
+		/// Get field name
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public string GetFieldName(int index)
+		{
+			return _dBaseHeader.Fields[index].Name;
+		}
 
+		/// <summary>
+		/// Get .Net type for field
+		/// </summary>
+		/// <param name="index"></param>
+		/// <returns></returns>
+		public Type GetFieldType(int index)
+		{
+			return _dBaseHeader.Fields[index].Type;
+		}
 
+				
 		#region IDisposable Members
 
 		/// <summary />
@@ -260,7 +269,7 @@ namespace Catfood.Shapefile
 						_indexStream = null;
 					}
 
-					((IDisposable)_dbfEnumerator).Dispose();
+					((IDisposable)_dBaseEnumerator).Dispose();
 				}
 
 				_disposed = true;
@@ -282,20 +291,9 @@ namespace Catfood.Shapefile
 				if (_disposed) throw new ObjectDisposedException("Shapefile");
 				if (!_opened) throw new InvalidOperationException("Shapefile not open.");
 
-				//_dbfEnumerator.Current
 				// get the metadata
-				StringDictionary metadata = null;
-				if (!RawMetadataOnly)
-				{
-					metadata = new StringDictionary();
-					ArrayList values = _dbfEnumerator.Current as ArrayList;
-					for (int i = 0; i < values.Count; i++)
-					{
-						metadata.Add(_dbaseFields[i].Name,
-								values[i].ToString());
-					}
-				}
-
+				ArrayList metadata = ((ShapefileReader.DbaseFileReader.DbaseRecord)_dBaseEnumerator.Current).Metadata;
+				
 				// get the index record
 				byte[] indexHeaderBytes = new byte[8];
 				_indexStream.Seek(Header.HeaderLength + _currentIndex * 8, SeekOrigin.Begin);
@@ -309,7 +307,9 @@ namespace Catfood.Shapefile
 				_mainStream.Seek(contentOffsetInWords * 2, SeekOrigin.Begin);
 				_mainStream.Read(shapeData, 0, bytesToRead);
 
-				return ShapeFactory.ParseShape(shapeData, metadata, null); //_dbfReader);
+
+
+				return ShapeFactory.ParseShape(shapeData, metadata, _dBaseEnumerator.Current as IDataRecord);
 			}
 		}
 
@@ -342,15 +342,7 @@ namespace Catfood.Shapefile
 
 			if (_currentIndex++ < (_count - 1))
 			{
-
-				// try to read the next database record
-
-				if (!_dbfReader.GetEnumerator().MoveNext())
-				{
-					throw new InvalidOperationException("Metadata database does not contain a record for the next shape");
-				}
-
-				return true;
+				return _dBaseEnumerator.MoveNext();
 			}
 			else
 			{
@@ -367,8 +359,7 @@ namespace Catfood.Shapefile
 			if (_disposed) throw new ObjectDisposedException("Shapefile");
 			if (!_opened) throw new InvalidOperationException("Shapefile not open.");
 
-			_dbfEnumerator.Reset();
-
+			_dBaseEnumerator.Reset();
 			_currentIndex = -1;
 		}
 
@@ -389,11 +380,12 @@ namespace Catfood.Shapefile
 
 		#region IEnumerable Members
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return (System.Collections.IEnumerator)this;
+			return (IEnumerator)this;
 		}
 
 		#endregion
 	}
 }
+ 

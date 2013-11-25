@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
     /// <summary>
     /// The ShapeType of a shape in a Shapefile

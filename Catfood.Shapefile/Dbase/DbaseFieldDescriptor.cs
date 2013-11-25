@@ -1,6 +1,6 @@
 using System;
 
-namespace NetTopologySuite.IO
+namespace ShapefileReader
 {
 	/// <summary>
 	/// Class for holding the information assicated with a dbase field.

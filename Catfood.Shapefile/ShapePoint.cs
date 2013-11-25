@@ -8,56 +8,57 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
 using System.Data;
+using System.Collections;
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
-    /// <summary>
-    /// A Shapefile Point Shape
-    /// </summary>
-    public class ShapePoint : Shape
-    {
-        private PointD _point;
+	/// <summary>
+	/// A Shapefile Point Shape
+	/// </summary>
+	public class ShapePoint : Shape
+	{
+		private PointD _point;
 
-        /// <summary>
-        /// A Shapefile Point Shape
-        /// </summary>
-        /// <param name="recordNumber">The record number in the Shapefile</param>
-        /// <param name="metadata">Metadata about the shape</param>
-        /// <param name="dataRecord">IDataRecord associated with the metadata</param>
-        /// <param name="shapeData">The shape record as a byte array</param>
-        /// <exception cref="ArgumentNullException">Thrown if shapeData is null</exception>
-        /// <exception cref="InvalidOperationException">Thrown if an error occurs parsing shapeData</exception>
-        protected internal ShapePoint(int recordNumber, StringDictionary metadata, IDataRecord dataRecord, byte[] shapeData)
-            : base(ShapeType.Point, recordNumber, metadata, dataRecord)
-        {
-            // metadata is validated by the base class
-            if (shapeData == null)
-            {
-                throw new ArgumentNullException("shapeData");
-            }
+		/// <summary>
+		/// A Shapefile Point Shape
+		/// </summary>
+		/// <param name="recordNumber">The record number in the Shapefile</param>
+		/// <param name="metadata">Metadata about the shape</param>
+		/// <param name="dataRecord">IDataRecord associated with the metadata</param>
+		/// <param name="shapeData">The shape record as a byte array</param>
+		/// <exception cref="ArgumentNullException">Thrown if shapeData is null</exception>
+		/// <exception cref="InvalidOperationException">Thrown if an error occurs parsing shapeData</exception>
+		protected internal ShapePoint(int recordNumber, ArrayList metadata, IDataRecord dataRecord, byte[] shapeData)
+			: base(ShapeType.Point, recordNumber, metadata, dataRecord)
+		{
+			// metadata is validated by the base class
+			if (shapeData == null)
+			{
+				throw new ArgumentNullException("shapeData");
+			}
 
-            // Note, shapeData includes an 8 byte header so positions below are +8
-            // Position     Field       Value   Type        Number  Order
-            // Byte 0       Shape Type  1       Integer     1       Little
-            // Byte 4       X           X       Double      1       Little
-            // Byte 12      Y           Y       Double      1       Little
+			// Note, shapeData includes an 8 byte header so positions below are +8
+			// Position     Field       Value   Type        Number  Order
+			// Byte 0       Shape Type  1       Integer     1       Little
+			// Byte 4       X           X       Double      1       Little
+			// Byte 12      Y           Y       Double      1       Little
 
-            // validation - shapedata should be 8 + 4 + 8 + 8 = 28 bytes long
-            if (shapeData.Length != 28)
-            {
-                throw new InvalidOperationException("Invalid shape data");
-            }
+			// validation - shapedata should be 8 + 4 + 8 + 8 = 28 bytes long
+			if (shapeData.Length != 28)
+			{
+				throw new InvalidOperationException("Invalid shape data");
+			}
 
-            _point = new PointD(EndianBitConverter.ToDouble(shapeData, 12, ProvidedOrder.Little),
-                EndianBitConverter.ToDouble(shapeData, 20, ProvidedOrder.Little));
-        }
+			_point = new PointD(EndianBitConverter.ToDouble(shapeData, 12, ProvidedOrder.Little),
+					EndianBitConverter.ToDouble(shapeData, 20, ProvidedOrder.Little));
+		}
 
-        /// <summary>
-        /// Gets the point
-        /// </summary>
-        public PointD Point
-        {
-            get { return _point; }
-        }
-    }
+		/// <summary>
+		/// Gets the point
+		/// </summary>
+		public PointD Point
+		{
+			get { return _point; }
+		}
+	}
 }

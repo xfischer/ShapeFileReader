@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Catfood.Shapefile
+namespace ShapefileReader
 {
     /// <summary>
     /// The order of bytes provided to EndianBitConverter

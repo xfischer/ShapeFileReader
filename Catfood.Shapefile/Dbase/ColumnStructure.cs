@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel;
 
-namespace NetTopologySuite.IO
+namespace ShapefileReader
 {
 	/// <summary>
 	/// This class is used in conjunction with RowStructure. 

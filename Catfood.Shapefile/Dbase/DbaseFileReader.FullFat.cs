@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace NetTopologySuite.IO
+namespace ShapefileReader
 {
     public partial class DbaseFileReader
     {

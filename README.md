@@ -1,6 +1,8 @@
 ShapeFileReader
 ===============
 
+[![Join the chat at https://gitter.im/ShapeFileReader/Lobby](https://badges.gitter.im/ShapeFileReader/Lobby.svg)](https://gitter.im/ShapeFileReader/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 WORK IN PROGRESS 
 
 ESRI Shapefile reader

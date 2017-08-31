@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ShapefileReader
+namespace Catfood.Shapefile
 {
     /// <summary>
     /// A simple double precision rectangle

@@ -78,20 +78,18 @@ namespace Catfood.Shapefile
         /// null if not metadata exists.
         /// </summary>
         /// <returns>Array of metadata names, or null of no metadata exists</returns>
-        public string[] GetMetadataNames()
+        public IEnumerable<string> GetMetadataNames()
         {
             if ((_metadata != null) && (_metadata.Keys.Count > 0))
             {
-                List<string> names = new List<string>(_metadata.Keys.Count);
                 foreach (string key in _metadata.Keys)
                 {
-                    names.Add(key);
+					yield return key;
                 }
-                return names.ToArray();
             }
             else
             {
-                return null;
+                yield return null;
             }
         }
 

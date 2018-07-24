@@ -101,7 +101,6 @@ namespace System.IO
 
 
             var row = reader.ReadBytes(header.RecordLenght);
-            int fieldsLength = 0;
             int position = 0;
             //foreach (var field in fields)
             //{
